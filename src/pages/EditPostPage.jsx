@@ -42,10 +42,10 @@ export default function EditPostPage() {
     setError('');
 
     try {
-      await postsAPI.update(id, formData);
+      await postsAPI.updatePost(id, formData);
       navigate(`/posts/${id}`);
     } catch (err) {
-      setError(err.response?.data?.detail || 'Ошибка обновления поста');
+      setError(err.response?.data?.detail || err.message || 'Ошибка обновления поста');
     } finally {
       setLoading(false);
     }

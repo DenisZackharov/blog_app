@@ -44,10 +44,10 @@ export default function PostDetailPage() {
   const handleDeletePost = async () => {
     if (window.confirm('Вы уверены, что хотите удалить этот пост?')) {
       try {
-        await postsAPI.delete(id);
+        await postsAPI.deletePost(id);
         navigate('/');
       } catch (err) {
-        setError('Ошибка удаления поста');
+        setError(err.response?.data?.detail || 'Ошибка удаления поста');
       }
     }
   };
@@ -60,7 +60,7 @@ export default function PostDetailPage() {
     setSubmitError('');
     
     try {
-      const response = await commentsAPI.create(id, { content: newComment });
+      const response = await commentsAPI.createComment(id, { content: newComment });
       setComments([...comments, response.data]);
       setNewComment('');
     } catch (err) {
@@ -73,27 +73,27 @@ export default function PostDetailPage() {
   const handleDeleteComment = async (commentId) => {
     if (window.confirm('Вы уверены, что хотите удалить этот комментарий?')) {
       try {
-        await commentsAPI.delete(id, commentId);
+        await commentsAPI.deleteComment(id, commentId);
         setComments(comments.filter(c => c.id !== commentId));
         if (editingComment === commentId) {
           setEditingComment(null);
         }
       } catch (err) {
-        setError('Ошибка удаления комментария');
+        setError(err.response?.data?.detail || 'Ошибка удаления комментария');
       }
     }
   };
 
   const handleEditComment = async (commentId) => {
     try {
-      await commentsAPI.update(id, commentId, { content: editCommentText });
+      await commentsAPI.updateComment(id, commentId, { content: editCommentText });
       setComments(comments.map(c => 
         c.id === commentId ? { ...c, content: editCommentText } : c
       ));
       setEditingComment(null);
       setEditCommentText('');
     } catch (err) {
-      setError('Ошибка обновления комментария');
+      setError(err.response?.data?.detail || 'Ошибка обновления комментария');
     }
   };
 

@@ -21,10 +21,10 @@ export default function CreatePostPage() {
     setError('');
 
     try {
-      await postsAPI.create(formData);
+      await postsAPI.createPost(formData);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.detail || 'Ошибка создания поста');
+      setError(err.response?.data?.detail || err.message || 'Ошибка создания поста');
     } finally {
       setLoading(false);
     }

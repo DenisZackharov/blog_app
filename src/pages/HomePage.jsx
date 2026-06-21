@@ -13,7 +13,7 @@ export default function HomePage() {
 
   const fetchPosts = async () => {
     try {
-      const response = await postsAPI.getAll();
+      const response = await postsAPI.getAllPosts();
       setPosts(response.data);
     } catch (err) {
       setError('Ошибка загрузки постов');

@@ -58,7 +58,7 @@ let comments = [...mockComments];
 let nextPostId = 4;
 let nextCommentId = 4;
 
-// Mock API functions
+// Mock API - использует ТЕ Ж САМЫЕ имена методов что и реальный API
 const mockAPI = {
   // Auth
   register: async (data) => {
@@ -134,13 +134,13 @@ const mockAPI = {
     return { data: currentUser };
   },
 
-  // Posts
-  getAllPosts: async () => {
+  // Posts - использует ТЕ Ж САМЫЕ имена методов что и реальный API
+  getAll: async () => {
     await new Promise(resolve => setTimeout(resolve, 300));
     return { data: posts };
   },
 
-  getPostById: async (id) => {
+  getById: async (id) => {
     await new Promise(resolve => setTimeout(resolve, 300));
     const post = posts.find(p => p.id === parseInt(id));
     if (!post) {
@@ -151,7 +151,7 @@ const mockAPI = {
     return { data: post };
   },
 
-  createPost: async (data) => {
+  create: async (data) => {
     await new Promise(resolve => setTimeout(resolve, 500));
     if (!currentUser) {
       const error = new Error('Не авторизован');
@@ -171,7 +171,7 @@ const mockAPI = {
     return { data: newPost };
   },
 
-  updatePost: async (id, data) => {
+  update: async (id, data) => {
     await new Promise(resolve => setTimeout(resolve, 500));
     if (!currentUser) {
       const error = new Error('Не авторизован');
@@ -198,7 +198,7 @@ const mockAPI = {
     return { data: posts[postIndex] };
   },
 
-  deletePost: async (id) => {
+  delete: async (id) => {
     await new Promise(resolve => setTimeout(resolve, 500));
     if (!currentUser) {
       const error = new Error('Не авторизован');
@@ -221,13 +221,13 @@ const mockAPI = {
     return { data: { message: 'Пост удален' } };
   },
 
-  // Comments
-  getCommentsByPost: async (postId) => {
+  // Comments - использует ТЕ Ж САМЫЕ имена методов что и реальный API
+  getAllByPost: async (postId) => {
     await new Promise(resolve => setTimeout(resolve, 300));
     return { data: comments.filter(c => c.post_id === parseInt(postId)) };
   },
 
-  createComment: async (postId, data) => {
+  create: async (postId, data) => {
     await new Promise(resolve => setTimeout(resolve, 500));
     if (!currentUser) {
       const error = new Error('Не авторизован');
@@ -246,7 +246,7 @@ const mockAPI = {
     return { data: newComment };
   },
 
-  updateComment: async (postId, commentId, data) => {
+  update: async (postId, commentId, data) => {
     await new Promise(resolve => setTimeout(resolve, 500));
     if (!currentUser) {
       const error = new Error('Не авторизован');
@@ -271,7 +271,7 @@ const mockAPI = {
     return { data: comments[commentIndex] };
   },
 
-  deleteComment: async (postId, commentId) => {
+  delete: async (postId, commentId) => {
     await new Promise(resolve => setTimeout(resolve, 500));
     if (!currentUser) {
       const error = new Error('Не авторизован');
@@ -297,7 +297,7 @@ const mockAPI = {
 // Determine if we should use mock data
 const useMock = import.meta.env.VITE_USE_MOCK === 'true';
 
-// Auth endpoints
+// Auth endpoints - ОДИНАКОВЫЕ имена для обоих режимов
 export const authAPI = useMock ? mockAPI : {
   register: (data) => api.post('/auth/register', data),
   login: (data) => api.post('/auth/login', data),
@@ -306,7 +306,7 @@ export const authAPI = useMock ? mockAPI : {
   updateProfile: (data) => api.put('/auth/profile', data),
 };
 
-// Posts endpoints
+// Posts endpoints - ОДИНАКОВЫЕ имена для обоих режимов
 export const postsAPI = useMock ? mockAPI : {
   getAll: () => api.get('/posts'),
   getById: (id) => api.get(`/posts/${id}`),
@@ -315,13 +315,21 @@ export const postsAPI = useMock ? mockAPI : {
   delete: (id) => api.delete(`/posts/${id}`),
 };
 
-// Comments endpoints
-export const commentsAPI = useMock ? mockAPI : {
-  getAllByPost: (postId) => api.get(`/posts/${postId}/comments`),
-  create: (postId, data) => api.post(`/posts/${postId}/comments`, data),
-  update: (postId, commentId, data) => api.put(`/posts/${postId}/comments/${commentId}`, data),
-  delete: (postId, commentId) => api.delete(`/posts/${postId}/comments/${commentId}`),
-};
+// Comments endpoints - ОДИНАКОВЫЕ имена для обоих режимов
+// Примечание: для mock нужно использовать отдельный объект из-за перегрузки методов
+export const commentsAPI = useMock 
+  ? {
+      getAllByPost: mockAPI.getAllByPost,
+      create: (postId, data) => mockAPI.create(postId, data),
+      update: (postId, commentId, data) => mockAPI.update(postId, commentId, data),
+      delete: (postId, commentId) => mockAPI.delete(postId, commentId),
+    }
+  : {
+      getAllByPost: (postId) => api.get(`/posts/${postId}/comments`),
+      create: (postId, data) => api.post(`/posts/${postId}/comments`, data),
+      update: (postId, commentId, data) => api.put(`/posts/${postId}/comments/${commentId}`, data),
+      delete: (postId, commentId) => api.delete(`/posts/${postId}/comments/${commentId}`),
+    };
 
 // Get current mock user (for testing)
 export const getMockUser = () => currentUser;

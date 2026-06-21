@@ -1,33 +1,35 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+// import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-  });
-  const { login, error } = useAuth();
-  const navigate = useNavigate();
+  // Закомментировано - авторизация отключена
+  // const [formData, setFormData] = useState({
+  //   username: '',
+  //   password: '',
+  // });
+  // const { login, error } = useAuth();
+  // const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  // const handleChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await login(formData);
-      navigate('/');
-    } catch (err) {
-      // Error is handled by context
-    }
-  };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     await login(formData);
+  //     navigate('/');
+  //   } catch (err) {
+  //     // Error is handled by context
+  //   }
+  // };
 
   return (
     <div className="form-container">
       <h2>Вход</h2>
-      {error && <div className="error-message">{error}</div>}
+      {/* Закомментировано - функция отключена */}
+      {/* {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="username">Имя пользователя или Email</label>
@@ -52,7 +54,10 @@ export default function LoginPage() {
           />
         </div>
         <button type="submit" className="btn-primary">Войти</button>
-      </form>
+      </form> */}
+      <p style={{ marginTop: '1rem', textAlign: 'center' }}>
+        Авторизация отключена. Вернется позже...
+      </p>
       <p style={{ marginTop: '1rem', textAlign: 'center' }}>
         Нет аккаунта? <Link to="/register" style={{ color: '#3498db' }}>Зарегистрируйтесь</Link>
       </p>

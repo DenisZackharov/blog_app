@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { authAPI } from '../api';
+// import { useAuth } from '../context/AuthContext';
+// import { authAPI } from '../api';
 
 export default function ProfilePage() {
-  const { user, updateUser: contextUpdateUser } = useAuth();
+  // Закомментировано - авторизация отключена
+  // const { user, updateUser: contextUpdateUser } = useAuth();
+  const user = null;
+  
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
@@ -14,53 +17,53 @@ export default function ProfilePage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      setFormData({
-        username: user.username || '',
-        email: user.email || '',
-        password: '',
-      });
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     setFormData({
+  //       username: user.username || '',
+  //       email: user.email || '',
+  //       password: '',
+  //     });
+  //   }
+  // }, [user]);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  // const handleChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setMessage('');
-    setError('');
-    setLoading(true);
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setMessage('');
+  //   setError('');
+  //   setLoading(true);
 
-    try {
-      const updateData = { ...formData };
-      if (!updateData.password) {
-        delete updateData.password;
-      }
+  //   try {
+  //     const updateData = { ...formData };
+  //     if (!updateData.password) {
+  //       delete updateData.password;
+  //     }
 
-      const response = await authAPI.updateProfile(updateData);
-      setMessage('Профиль успешно обновлен');
-      setEditing(false);
+  //     const response = await authAPI.updateProfile(updateData);
+  //     setMessage('Профиль успешно обновлен');
+  //     setEditing(false);
       
-      // Update user in context
-      if (contextUpdateUser) {
-        // Reload to get updated user data
-        window.location.reload();
-      }
-    } catch (err) {
-      setError(err.response?.data?.detail || 'Ошибка обновления');
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     // Update user in context
+  //     if (contextUpdateUser) {
+  //       // Reload to get updated user data
+  //       window.location.reload();
+  //     }
+  //   } catch (err) {
+  //     setError(err.response?.data?.detail || 'Ошибка обновления');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   if (!user) {
     return (
       <div className="loading">
         <div className="spinner"></div>
-        <p>Загрузка профиля...</p>
+        <p>Авторизация отключена. Профиль недоступен.</p>
       </div>
     );
   }

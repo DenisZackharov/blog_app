@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { postsAPI, commentsAPI } from '../api';
-import { useAuth } from '../context/AuthContext';
+// import { useAuth } from '../context/AuthContext';
 
 export default function PostDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
+  // const { user, isAuthenticated } = useAuth();
+  const user = null;
+  const isAuthenticated = false;
   
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
@@ -44,7 +46,7 @@ export default function PostDetailPage() {
   const handleDeletePost = async () => {
     if (window.confirm('Вы уверены, что хотите удалить этот пост?')) {
       try {
-        await postsAPI.deletePost(id);
+        await postsAPI.delete(id);
         navigate('/');
       } catch (err) {
         setError(err.response?.data?.detail || 'Ошибка удаления поста');
@@ -60,7 +62,7 @@ export default function PostDetailPage() {
     setSubmitError('');
     
     try {
-      const response = await commentsAPI.createComment(id, { content: newComment });
+      const response = await commentsAPI.create(id, { content: newComment });
       setComments([...comments, response.data]);
       setNewComment('');
     } catch (err) {
@@ -73,7 +75,7 @@ export default function PostDetailPage() {
   const handleDeleteComment = async (commentId) => {
     if (window.confirm('Вы уверены, что хотите удалить этот комментарий?')) {
       try {
-        await commentsAPI.deleteComment(id, commentId);
+        await commentsAPI.delete(id, commentId);
         setComments(comments.filter(c => c.id !== commentId));
         if (editingComment === commentId) {
           setEditingComment(null);
@@ -86,7 +88,7 @@ export default function PostDetailPage() {
 
   const handleEditComment = async (commentId) => {
     try {
-      await commentsAPI.updateComment(id, commentId, { content: editCommentText });
+      await commentsAPI.update(id, commentId, { content: editCommentText });
       setComments(comments.map(c => 
         c.id === commentId ? { ...c, content: editCommentText } : c
       ));

@@ -1,14 +1,14 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
+// import { useAuth } from '../context/AuthContext';
 
 export default function Navbar() {
-  const { user, isAuthenticated, logout } = useAuth();
-  const navigate = useNavigate();
+  // const { user, isAuthenticated, logout } = useAuth();
+  // const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    await logout();
-    navigate('/');
-  };
+  // const handleLogout = async () => {
+  //   await logout();
+  //   navigate('/');
+  // };
 
   return (
     <nav className="navbar">
@@ -19,7 +19,8 @@ export default function Navbar() {
         <div className="navbar-links">
           <Link to="/" className="nav-link">Главная</Link>
           
-          {isAuthenticated ? (
+          {/* Закомментировано - элементы авторизации отключены */}
+          {/* {isAuthenticated ? (
             <>
               <Link to="/posts/create" className="nav-link">Создать пост</Link>
               <Link to="/profile" className="nav-link">
@@ -34,7 +35,7 @@ export default function Navbar() {
               <Link to="/login" className="nav-link">Войти</Link>
               <Link to="/register" className="nav-link">Регистрация</Link>
             </>
-          )}
+          )} */}
         </div>
       </div>
     </nav>

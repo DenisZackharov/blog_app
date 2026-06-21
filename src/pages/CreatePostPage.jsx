@@ -21,7 +21,7 @@ export default function CreatePostPage() {
     setError('');
 
     try {
-      await postsAPI.createPost(formData);
+      await postsAPI.create(formData);
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.detail || err.message || 'Ошибка создания поста');
